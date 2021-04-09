@@ -1,0 +1,65 @@
+<form [formGroup]="profileForm">
+    <div>
+        <label>
+        First Name: <br>
+            <input type="text" formControlName="firstName" class="form-control" minlength="4">
+             </label>
+    </div><br>
+    <div *ngIf="profileForm.controls['firstName']?.invalid && (profileForm.controls['firstName']?.dirty || profileForm.controls['firstName']?.touched)" class="text-danger">
+        <div *ngIf="profileForm.controls['firstName'].errors?.required">Name is required</div>
+        <div *ngIf="profileForm.controls['firstName'].errors?.minlength">Name should contain atleast 4 characters</div>
+        <div *ngIf="profileForm.controls['firstName'].errors?.forbiddenName">Name Not Allowed</div>
+    </div>
+    <div>
+        <label>
+        Last Name: <br>
+            <input type="text" formControlName="lastName" class="form-control" required>
+        </label>
+    </div><br>
+    <div>
+        <label>
+        Email: <br>
+            <input type="text" formControlName="email" class="form-control" required pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$">
+        </label>
+    </div><br>
+    
+    <div>
+        <label>
+        Password: <br>
+            <input type="password" formControlName="password" class="form-control" required>
+        </label>
+    </div><br>
+    <div>
+        <label>
+        Confirm Password: <br>
+            <input type="password" formControlName="confirmPassword" class="form-control" required>
+        </label>
+        <div *ngIf="profileForm.controls['confirmPassword']?.invalid && (profileForm.controls['confirmPassword']?.dirty || profileForm.controls['confirmPassword']?.touched)" class="text-danger">
+            
+        <div class="text-danger" *ngIf="profileForm.controls['confirmPassword'].errors?.misMatchError">password not matched</div>
+    </div></div><br>
+
+    Skills:
+     <div formArrayName="skills">
+         <div *ngFor="let skill of skills.controls; let i=index">
+             <div [formGroupName]="i">
+                 {{i+1}}<br>
+                 Skill Name: 
+                 <input type="text" formControlName="skill">
+                 exp:
+                 <input type="text" formControlName="exp">
+
+                 <button (click)="removeSkill(i)">Remove</button>
+             </div>
+         </div>
+     </div>
+  <button type="submit" (click)="onSubmit()" [disabled]="!profileForm.valid">Submit</button><br><br>
+
+  
+</form> 
+
+ <button type="button" (click)="addSkill()" >Add Skill</button>
+  <p>
+    Form Status: {{ profileForm.status }}
+  </p>
+  {{this.profileForm.value | json}}
